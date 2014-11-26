@@ -5,8 +5,10 @@ var htmlparser2 = require('htmlparser2')
 
 var dependencyMap = {}
 var currFile = ""
+var currFilePath = ""
 
-var watcher = chokidar.watch('./sandbox', {ignored: /[\/\\]\./, persistent: true});
+var rootDir = "./sandbox"
+var watcher = chokidar.watch(rootDir, {ignored: /[\/\\]\./, persistent: true});
 
 watcher
   .on('add', onUpdateFile)
@@ -39,13 +41,28 @@ function onUpdateFile(path, stats){
 
 function updateDepMap(path, filename){
 	currFile = filename
+	currFilePath = path
 	htmlParser.write(fs.readFileSync(path))
 }
 
 function addDependency(source, dependency){
+	source = normalizePath(source)
 	if(key in dependencyMap){
 		dependencyMap[key][value] = true
 	}else{
 		dependencyMap[key] = {}
+	}
+}
+
+function normalizePath(path){
+	if(path.indexOf("http") == 0){
+		//Absolute path, ignore for now
+		return null
+	}else if(path.indexOf("/") == 0){
+		//Relative to the root directory
+		return path.join(rootDir, path)
+	}else{
+		//Relative to the containing HTML file
+		return path.join(currFilePath, path)
 	}
 }
