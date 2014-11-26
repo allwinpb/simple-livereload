@@ -5,7 +5,7 @@ var htmlparser2 = require('htmlparser2')
 
 var dependencyMap = {}
 var currFile = ""
-var currFilePath = ""
+var currFileDir = ""
 
 var rootDir = "./sandbox"
 var watcher = chokidar.watch(rootDir, {ignored: /[\/\\]\./, persistent: true});
@@ -17,7 +17,10 @@ watcher
   .on('unlink', function(path) {console.log('File', path, 'has been removed');})
   .on('unlinkDir', function(path) {console.log('Directory', path, 'has been removed');})
   .on('error', function(error) {console.error('Error happened', error);})
-  .on('ready', function() {console.info('Initial scan complete. Ready for changes.')})
+  .on('ready', function() {
+  	console.log(dependencyMap)
+  	watcher.close()
+  })
 
 var htmlParser = new htmlparser2.Parser({
 	onopentag: function(name, attribs){
@@ -41,17 +44,16 @@ function onUpdateFile(path, stats){
 
 function updateDepMap(path, filename){
 	currFile = filename
-	currFilePath = path
+	currFileDir = pathParser.dirname(path)
 	htmlParser.write(fs.readFileSync(path))
 }
 
 function addDependency(source, dependency){
 	source = normalizePath(source)
-	if(source in dependencyMap){
-		dependencyMap[source][value] = true
-	}else{
+	if(!(source in dependencyMap)){
 		dependencyMap[source] = {}
 	}
+	dependencyMap[source][dependency] = true
 }
 
 function normalizePath(path){
@@ -63,12 +65,13 @@ function normalizePath(path){
 		return pathParser.join(rootDir, path)
 	}else{
 		//Relative to the containing HTML file
-		return pathParser.join(currFilePath, path)
+		return pathParser.join(currFileDir, path)
+		//TODO: Dynamically add out-of-dir file references to watch list
 	}
 }
 
 function isValid(src){
-	return !isEqualsAny(src, [undefined, "", "#"])
+	return !isEqualsAny(src, [undefined, "#", ""])
 }
 
 function isEqualsAny(input, args_array){
