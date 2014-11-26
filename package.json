@@ -4,7 +4,7 @@
   "description": "No frills tool to reload webpage on file change",
   "main": "index.js",
   "scripts": {
-    "test": "test",
+    "test": "node node_modules/mocha/bin/mocha",
     "start": "node index.js"
   },
   "repository": {
@@ -23,5 +23,9 @@
   "dependencies": {
     "chokidar": "^0.11.1",
     "htmlparser2": "^3.8.2"
+  },
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "mocha": "^2.0.1"
   }
 }
