@@ -24,10 +24,14 @@ watcher
 
 var htmlParser = new htmlparser2.Parser({
 	onopentag: function(name, attribs){
+		var source;
 		if(name === "script" && isValid(attribs.src)){
-			addDependency(attribs.src, currFile)
+			source = attribs.src
 		}else if(name === "link" && isValid(attribs.href)){
-			addDependency(attribs.href, currFile)
+			source = attribs.href
+		}
+		if(source){
+			addDependency(source, pathParser.join(currFileDir, currFile))
 		}
 	}
 });
@@ -50,6 +54,9 @@ function updateDepMap(path, filename){
 
 function addDependency(source, dependency){
 	source = normalizePath(source)
+	if(source == null){
+		return null
+	}
 	if(!(source in dependencyMap)){
 		dependencyMap[source] = {}
 	}
