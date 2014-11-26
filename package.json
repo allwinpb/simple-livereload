@@ -1,0 +1,27 @@
+{
+  "name": "simple-livereload",
+  "version": "0.0.1",
+  "description": "No frills tool to reload webpage on file change",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/allwinpb/simple-livereload.git"
+  },
+  "keywords": [
+    "livereload"
+  ],
+  "author": "Allwin Panikulam <allwinpb@gmail.com>",
+  "license": "GPLv3",
+  "bugs": {
+    "url": "https://github.com/allwinpb/simple-livereload/issues"
+  },
+  "homepage": "https://github.com/allwinpb/simple-livereload",
+  "dependencies": {
+    "chokidar": "^0.11.1",
+    "htmlparser2": "^3.8.2"
+  }
+}
