@@ -1,4 +1,9 @@
 var watcher = require('./lib/watcher')
+var server = require('./lib/server')
 
-watcher.init('sandbox')
+var dir = "sandbox";
+watcher.init(dir)
+server.init(dir)
+
 watcher.start()
+server.start()
