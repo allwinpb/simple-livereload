@@ -1,3 +1,4 @@
 var watcher = require('./lib/watcher')
 
-watcher.init()
+watcher.init('sandbox')
+watcher.start()
