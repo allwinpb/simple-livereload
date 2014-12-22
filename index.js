@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var watcher = require('./lib/watcher')
 var server = require('./lib/server')
 
